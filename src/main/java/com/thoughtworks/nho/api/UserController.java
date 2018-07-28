@@ -3,6 +3,8 @@ package com.thoughtworks.nho.api;
 import com.thoughtworks.nho.cofiguration.security.JWTUser;
 import com.thoughtworks.nho.domain.User;
 import com.thoughtworks.nho.service.UserService;
+import com.thoughtworks.nho.util.ResponseInfo;
+import com.thoughtworks.nho.util.ResultCode;
 import com.thoughtworks.nho.util.UserFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,13 +23,15 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public JWTUser create(@RequestBody User user) {
-        return UserFactory.fromUser(userService.create(user));
+    public ResponseInfo create(@RequestBody User user) {
+        JWTUser jwtUser =  UserFactory.fromUser(userService.create(user));
+        return new ResponseInfo(ResultCode.SUCCESS.getCode(),jwtUser);
     }
 
     @GetMapping("{username}")
     @ResponseStatus(HttpStatus.OK)
-    public JWTUser find(@PathVariable String username) {
-        return UserFactory.fromUser(userService.findByName(username));
+    public ResponseInfo find(@PathVariable String username) {
+        JWTUser jwtUser =  UserFactory.fromUser(userService.findByName(username));
+        return new ResponseInfo(ResultCode.SUCCESS.getCode(),jwtUser);
     }
 }

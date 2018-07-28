@@ -81,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
 
     private String extractToken(HttpServletRequest request) {
         if (!hasJWTToken(request)) {
-            throw new InvalidCredentialException();
+            throw new InvalidCredentialException("invalid credential!");
         }
         return request.getHeader(header).substring(tokenPrefix.length() + 1);
     }
