@@ -14,17 +14,17 @@ class UserControllerTest extends BaseControllerTest {
     @Test
     void should_create_user() throws Exception {
         loginWithUser("future_star");
-        User user = User.builder().name("new_future_star").password("123456").build();
+        User user = User.builder().name("test").password("123456789").build();
         mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(user)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.data.username").value("new_future_star"));
+                .andExpect(jsonPath("$.data.username").value("test"));
     }
 
     @Test
     void should_existed_user() throws Exception {
-        User user = User.builder().name("admin").password("123456").build();
+        User user = User.builder().name("admin").password("123456789").build();
         mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(user)))

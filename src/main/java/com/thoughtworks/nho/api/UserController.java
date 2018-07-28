@@ -31,7 +31,7 @@ public class UserController {
         if (user.getName() == null || !user.getName().matches(USERNAME_CHECK)) {
             return new ResponseInfo(ResultCode.USER_NAME_ERROR.getCode(), "必须是1-10位英文字符，不能有空格");
         }
-        if (user.getPassword() == null || !user.getPassword().matches(USERNAME_CHECK)) {
+        if (user.getPassword() == null || !user.getPassword().matches(PASSWORD_CHECK)) {
             return new ResponseInfo(ResultCode.USER_PWD_ERROR.getCode(), "必须是大于8个的数字，不能有空格");
         }
         JWTUser jwtUser =  UserFactory.fromUser(userService.create(user));
