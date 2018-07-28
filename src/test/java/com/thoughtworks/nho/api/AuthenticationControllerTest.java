@@ -1,26 +1,26 @@
 package com.thoughtworks.nho.api;
 
-import org.junit.jupiter.api.BeforeEach;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thoughtworks.nho.cofiguration.security.LoginRequestUser;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.http.MediaType;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class AuthenticationControllerTest {
-    @Autowired
-    private WebApplicationContext wac;
-    protected MockMvc mockMvc;
-
-    @BeforeEach
-    void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-    }
-
+class AuthenticationControllerTest extends BaseControllerTest {
     @Test
-    void login() {
+    void should_login() throws Exception {
+        loginWithUser("future_star");
+        LoginRequestUser user = LoginRequestUser.builder().username("future_star").password("123456").build();
 
+        mockMvc.perform(post("/api/authentication")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(user)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("0"))
+                .andExpect(jsonPath("$.data.username").value(user.getUsername()))
+                .andExpect(jsonPath("$.data.password").value(user.getPassword()));
     }
 }
