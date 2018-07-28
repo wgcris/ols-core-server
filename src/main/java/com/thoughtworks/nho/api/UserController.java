@@ -20,6 +20,8 @@ public class UserController {
 
     private static final String USERNAME_CHECK = "^[a-zA-Z]{1,10}$";
 
+    private static final String PASSWORD_CHECK = "^[0-9]{8,}$";
+
     @Autowired
     private UserService userService;
 
@@ -29,7 +31,9 @@ public class UserController {
         if (user.getName() == null || !user.getName().matches(USERNAME_CHECK)) {
             return new ResponseInfo(ResultCode.USER_NAME_ERROR.getCode(), "必须是1-10位英文字符，不能有空格");
         }
-
+        if (user.getPassword() == null || !user.getPassword().matches(USERNAME_CHECK)) {
+            return new ResponseInfo(ResultCode.USER_PWD_ERROR.getCode(), "必须是大于8个的数字，不能有空格");
+        }
         JWTUser jwtUser =  UserFactory.fromUser(userService.create(user));
         return new ResponseInfo(ResultCode.SUCCESS.getCode(),jwtUser);
     }
