@@ -19,7 +19,30 @@ class UserControllerTest extends BaseControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(user)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.username").value("new_future_star"));
+                .andExpect(jsonPath("$.data.username").value("new_future_star"));
     }
+
+    @Test
+    void should_existed_user() throws Exception {
+        User user = User.builder().name("admin").password("123456").build();
+        mockMvc.perform(post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(user)))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.code").value("-1"))
+                .andExpect(jsonPath("$.message").value("User already exists."));
+    }
+
+    @Test
+    void should_return_name_error() throws Exception {
+        User user = User.builder().name("admin23132").password("123456").build();
+        mockMvc.perform(post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(user)))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.code").value("-1"))
+                .andExpect(jsonPath("$.message").value("user name error"));
+    }
+
 
 }
