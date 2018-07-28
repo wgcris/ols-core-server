@@ -41,8 +41,17 @@ class UserControllerTest extends BaseControllerTest {
                 .content(new ObjectMapper().writeValueAsString(user)))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.code").value("-1"))
-                .andExpect(jsonPath("$.message").value("user name error"));
+                .andExpect(jsonPath("$.message").value("必须是1-10位英文字符，不能有空格"));
     }
 
-
+    @Test
+    void should_return_pwd_error() throws Exception {
+        User user = User.builder().name("test").password("123456").build();
+        mockMvc.perform(post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(user)))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.code").value("-1"))
+                .andExpect(jsonPath("$.message").value("必须是大于8个的数字，不能有空格"));
+    }
 }
