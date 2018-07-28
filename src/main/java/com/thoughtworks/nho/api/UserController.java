@@ -18,12 +18,18 @@ import static com.thoughtworks.nho.cofiguration.security.APISecureRolePrivilege.
 @RequestMapping("/api/users")
 public class UserController {
 
+    private static final String USERNAME_CHECK = "^[a-zA-Z]{1,10}$";
+
     @Autowired
     private UserService userService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseInfo create(@RequestBody User user) {
+        if (user.getName() == null || !user.getName().matches(USERNAME_CHECK)) {
+            return new ResponseInfo(ResultCode.USER_NAME_ERROR.getCode(), "必须是1-10位英文字符，不能有空格");
+        }
+
         JWTUser jwtUser =  UserFactory.fromUser(userService.create(user));
         return new ResponseInfo(ResultCode.SUCCESS.getCode(),jwtUser);
     }
