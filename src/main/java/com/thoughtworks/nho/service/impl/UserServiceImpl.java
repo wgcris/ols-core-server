@@ -53,10 +53,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UserNotExistException {
         User user = userRepository.findByName(username);
         if (user == null) {
-            throw new UsernameNotFoundException("该账户未注册，请注册");
+            throw new UserNotExistException("该账户未注册，请注册");
         }
         return JWTUser.builder()
                 .username(user.getName())
