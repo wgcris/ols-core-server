@@ -30,7 +30,7 @@ class UserControllerTest extends BaseControllerTest {
                 .content(new ObjectMapper().writeValueAsString(user)))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.code").value("-1"))
-                .andExpect(jsonPath("$.message").value("User already exists."));
+                .andExpect(jsonPath("$.message").value("该用户已注册"));
     }
 
     @Test
