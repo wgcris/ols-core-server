@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
         user.setId(StringUtils.uuid());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (userRepository.findByName(user.getName()) != null) {
-            throw new UserExistedException("User already exists.");
+            throw new UserExistedException("该用户已注册");
         }
         return userRepository.save(user);
     }
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByName(username);
         if (user == null) {
-            throw new UsernameNotFoundException("Username does not exist.");
+            throw new UsernameNotFoundException("该账户未注册，请注册");
         }
         return JWTUser.builder()
                 .username(user.getName())
